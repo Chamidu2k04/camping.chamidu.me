@@ -1,101 +1,90 @@
-// src/main/java/com/campingsrilanka/dao/UserDAO.java
 package com.campingsrilanka.dao;
 
 import com.campingsrilanka.model.User;
-import com.campingsrilanka.util.DBConnection;
-import org.mindrot.jbcrypt.BCrypt;
+import com.campingsrilanka.util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class UserDAO {
-    public void createUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getRole());
-            pstmt.executeUpdate();
-        }
+
+    public boolean registerUser(User user) {
+        String query = "INSERT INTO users (username, email, password, full_name, is_admin) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, hashPassword(user.getPassword()));
+            stmt.setString(4, user.getFullName());
+            stmt.setBoolean(5, user.isAdmin());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
-    public User getUserByUsername(String username) throws SQLException {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
+    public User loginUser(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, hashPassword(password));
+
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
+                user.setFullName(rs.getString("full_name"));
+                user.setAdmin(rs.getBoolean("is_admin"));
                 return user;
             }
-        }
+
+        } catch (SQLException e) { e.printStackTrace(); }
         return null;
     }
 
-    public User getUserById(int id) throws SQLException {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
-                return user;
+    public boolean usernameExists(String username) {
+        String query = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
+
+    public boolean emailExists(String email) {
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
+
+    public String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hex = new StringBuilder();
+            for (byte b : hash) {
+                String h = Integer.toHexString(0xff & b);
+                if (h.length() == 1) hex.append('0');
+                hex.append(h);
             }
-        }
-        return null;
-    }
-
-    public List<User> getAllUsers() throws SQLException {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
-                users.add(user);
-            }
-        }
-        return users;
-    }
-
-    public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getEmail());
-            pstmt.setString(3, user.getRole());
-            pstmt.setInt(4, user.getId());
-            pstmt.executeUpdate();
-        }
-    }
-
-    public void deleteUser(int id) throws SQLException {
-        String sql = "DELETE FROM users WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-        }
+            return hex.toString();
+        } catch (NoSuchAlgorithmException e) { e.printStackTrace(); return password; }
     }
 }
