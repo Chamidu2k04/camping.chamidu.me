@@ -27,8 +27,7 @@
         <error-code>500</error-code>
         <location>/WEB-INF/views/error.jsp</location>
     </error-page>
-
-    <!-- Ensure static resources are served -->
+    <!-- Map static folders -->
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/css/*</url-pattern>

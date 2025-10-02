@@ -8,6 +8,14 @@
         return;
     }
 %>
+<%
+    if (user.isAdmin()) {
+        response.sendRedirect(request.getContextPath() + "/adminDashboard");
+        return;
+    }
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,11 +81,6 @@
                 <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">
                     <i class="fas fa-search"></i> Browse Places
                 </a>
-                <% if (user.isAdmin()) { %>
-                <a href="/adminDashboard" class="btn btn-secondary">
-                    <i class="fas fa-cog"></i> Admin Panel
-                </a>
-                <% } %>
             </div>
         </div>
 
@@ -156,9 +159,6 @@
                         <i class="fas fa-mountain"></i>
                         <h3>No posts yet</h3>
                         <p>Start sharing your camping experiences!</p>
-                        <a href="${pageContext.request.contextPath}/place/add" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add Your First Place
-                        </a>
                     </div>
                 </c:if>
             </div>
