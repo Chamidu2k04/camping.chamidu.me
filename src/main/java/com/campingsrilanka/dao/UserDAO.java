@@ -9,22 +9,38 @@ import java.security.NoSuchAlgorithmException;
 
 public class UserDAO {
 
+    // Register a new user (admin or regular)
     public boolean registerUser(User user) {
+        // Check if username or email already exists
+        if (usernameExists(user.getUsername())) {
+            System.out.println("Username already exists.");
+            return false;
+        }
+        if (emailExists(user.getEmail())) {
+            System.out.println("Email already exists.");
+            return false;
+        }
+
         String query = "INSERT INTO users (username, email, password, full_name, is_admin) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
-            stmt.setString(3, hashPassword(user.getPassword()));
+            stmt.setString(3, hashPassword(user.getPassword())); // SHA-256 hash
             stmt.setString(4, user.getFullName());
             stmt.setBoolean(5, user.isAdmin());
 
-            return stmt.executeUpdate() > 0;
+            int rows = stmt.executeUpdate();
+            return rows > 0;
 
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    // Login user
     public User loginUser(String username, String password) {
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -44,10 +60,13 @@ public class UserDAO {
                 return user;
             }
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
+    // Check if username exists
     public boolean usernameExists(String username) {
         String query = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -57,10 +76,13 @@ public class UserDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) return rs.getInt(1) > 0;
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
+    // Check if email exists
     public boolean emailExists(String email) {
         String query = "SELECT COUNT(*) FROM users WHERE email = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -70,10 +92,13 @@ public class UserDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) return rs.getInt(1) > 0;
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
+    // SHA-256 password hashing
     public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -85,6 +110,9 @@ public class UserDAO {
                 hex.append(h);
             }
             return hex.toString();
-        } catch (NoSuchAlgorithmException e) { e.printStackTrace(); return password; }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return password; // fallback
+        }
     }
 }
