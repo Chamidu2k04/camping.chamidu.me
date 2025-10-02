@@ -1,16 +1,14 @@
 <%@ page import="com.campingsrilanka.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
     User user = (User) session.getAttribute("user");
     if (user == null) {
         response.sendRedirect(request.getContextPath() + "/login");
         return;
     }
-%>
-<%
     if (user.isAdmin()) {
-        response.sendRedirect(request.getContextPath() + "/adminDashboard");
+        response.sendRedirect(request.getContextPath() + "/login"); // admins can't access user dashboard
         return;
     }
 %>
@@ -75,7 +73,7 @@
 
             <!-- Quick Actions -->
             <div class="dashboard-actions">
-                <a href="${pageContext.request.contextPath}/place/add" class="btn btn-primary">
+                <a href="${pageContext.request.contextPath}/WEB-INF/views/addPlace.jsp" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Place
                 </a>
                 <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">

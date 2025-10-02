@@ -1,17 +1,15 @@
 <%@ page import="com.campingsrilanka.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
   User user = (User) session.getAttribute("user");
-  if (user == null) {
+  if (user == null || !user.isAdmin()) {
     response.sendRedirect(request.getContextPath() + "/login");
     return;
   }
-  if (!user.isAdmin()) {
-    response.sendRedirect(request.getContextPath() + "/dashboard");
-    return;
-  }
 %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
