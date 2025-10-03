@@ -79,6 +79,7 @@
 </section>
 
 <!-- Tab Navigation -->
+<!-- Tab Navigation -->
 <section class="places-section">
     <div class="container">
         <div class="tab-navigation">
@@ -97,24 +98,26 @@
         <div id="recent" class="tab-content active">
             <div class="places-grid">
                 <c:forEach items="${recentPlaces}" var="place">
-                    <div class="place-card">
-                        <div class="place-image">
-                            <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
-                            <span class="place-badge ${place.accessType}">${place.accessType}</span>
-                        </div>
-                        <div class="place-content">
-                            <h3>${place.placeName}</h3>
-                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
-                            <p class="place-description">${place.description}</p>
-                            <div class="place-footer">
-                                <div class="place-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${place.ratingAvg} (${place.ratingCount})</span>
+                    <c:if test="${place.status eq 'approved'}">
+                        <div class="place-card">
+                            <div class="place-image">
+                                <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
+                                <span class="place-badge ${place.accessType}">${place.accessType}</span>
+                            </div>
+                            <div class="place-content">
+                                <h3>${place.placeName}</h3>
+                                <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
+                                <p class="place-description">${place.description}</p>
+                                <div class="place-footer">
+                                    <div class="place-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>${place.ratingAvg} (${place.ratingCount})</span>
+                                    </div>
+                                    <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                                 </div>
-                                <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                             </div>
                         </div>
-                    </div>
+                    </c:if>
                 </c:forEach>
             </div>
         </div>
@@ -123,24 +126,27 @@
         <div id="trending" class="tab-content">
             <div class="places-grid">
                 <c:forEach items="${trendingPlaces}" var="place">
-                    <div class="place-card">
-                        <div class="place-image">
-                            <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
-                            <span class="place-badge trending-badge"><i class="fas fa-fire"></i> Trending</span>
-                        </div>
-                        <div class="place-content">
-                            <h3>${place.placeName}</h3>
-                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
-                            <p class="place-description">${place.description}</p>
-                            <div class="place-footer">
-                                <div class="place-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${place.ratingAvg} (${place.ratingCount})</span>
+                    <c:if test="${place.status eq 'approved'}">
+                        <!-- Place card same as above -->
+                        <div class="place-card">
+                            <div class="place-image">
+                                <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
+                                <span class="place-badge trending-badge"><i class="fas fa-fire"></i> Trending</span>
+                            </div>
+                            <div class="place-content">
+                                <h3>${place.placeName}</h3>
+                                <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
+                                <p class="place-description">${place.description}</p>
+                                <div class="place-footer">
+                                    <div class="place-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>${place.ratingAvg} (${place.ratingCount})</span>
+                                    </div>
+                                    <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                                 </div>
-                                <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                             </div>
                         </div>
-                    </div>
+                    </c:if>
                 </c:forEach>
             </div>
         </div>
@@ -149,24 +155,27 @@
         <div id="uncommon" class="tab-content">
             <div class="places-grid">
                 <c:forEach items="${uncommonPlaces}" var="place">
-                    <div class="place-card">
-                        <div class="place-image">
-                            <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
-                            <span class="place-badge gem-badge"><i class="fas fa-gem"></i> Hidden Gem</span>
-                        </div>
-                        <div class="place-content">
-                            <h3>${place.placeName}</h3>
-                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
-                            <p class="place-description">${place.description}</p>
-                            <div class="place-footer">
-                                <div class="place-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${place.ratingAvg} (${place.ratingCount})</span>
+                    <c:if test="${place.status eq 'approved'}">
+                        <!-- Place card same as above -->
+                        <div class="place-card">
+                            <div class="place-image">
+                                <img src="${pageContext.request.contextPath}/uploads/${place.primaryImage}" alt="${place.placeName}">
+                                <span class="place-badge gem-badge"><i class="fas fa-gem"></i> Hidden Gem</span>
+                            </div>
+                            <div class="place-content">
+                                <h3>${place.placeName}</h3>
+                                <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
+                                <p class="place-description">${place.description}</p>
+                                <div class="place-footer">
+                                    <div class="place-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>${place.ratingAvg} (${place.ratingCount})</span>
+                                    </div>
+                                    <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                                 </div>
-                                <a href="${pageContext.request.contextPath}/place/${place.id}" class="btn btn-small">View Details</a>
                             </div>
                         </div>
-                    </div>
+                    </c:if>
                 </c:forEach>
             </div>
         </div>

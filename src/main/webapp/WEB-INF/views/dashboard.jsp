@@ -389,7 +389,7 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${place.status == 'pending' || place.status == 'rejected'}">
-                                    <a href="${pageContext.request.contextPath}/place/edit?id=${place.id}" class="btn btn-small">
+                                    <a href="${pageContext.request.contextPath}/place/edit/${place.id}" class="btn btn-small">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
                                 </c:if>

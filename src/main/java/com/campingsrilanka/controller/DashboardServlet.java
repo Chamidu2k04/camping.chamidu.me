@@ -38,7 +38,7 @@ public class DashboardServlet extends HttpServlet {
 
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // --- Fetch user posts ---
+            // 1️⃣ Get user posts
             String sql = "SELECT * FROM places WHERE user_id = ? ORDER BY created_at DESC";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, user.getId());
@@ -63,7 +63,7 @@ public class DashboardServlet extends HttpServlet {
 
             totalPosts = userPlaces.size();
 
-            // --- Fetch favorites ---
+            // 2️⃣ Get favorites (assuming favorites table exists)
             String sqlFav = "SELECT p.* FROM favorites f " +
                     "JOIN places p ON f.place_id = p.id WHERE f.user_id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sqlFav)) {
