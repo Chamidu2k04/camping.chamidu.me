@@ -23,247 +23,52 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 80px auto 20px;
-            padding: 20px;
-        }
-
-        .welcome-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .user-info-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #667eea;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        .info-value {
-            color: #1f2937;
-        }
-
-        .dashboard-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .posts-section, .favorites-section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .status-filter {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #e5e7eb;
-            background: white;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .post-card {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .post-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .post-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 10px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .post-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .post-content {
-            flex: 1;
-        }
-
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-approved {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-rejected {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .post-location {
-            color: #6b7280;
-            margin-bottom: 10px;
-        }
-
-        .post-description {
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .admin-feedback {
-            background: #fef2f2;
-            border-left: 4px solid #ef4444;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .post-stats {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-            color: #6b7280;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .post-date {
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6b7280;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: #d1d5db;
-        }
-
-        .favorites-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .favorite-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .favorite-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .favorite-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .favorite-content {
-            padding: 15px;
-        }
-
+        /* --- Styles (same as before, unchanged) --- */
+        .dashboard-container { max-width: 1200px; margin: 80px auto 20px; padding: 20px; }
+        .welcome-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .user-info-card { background: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #667eea; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: #4b5563; }
+        .info-value { color: #1f2937; }
+        .dashboard-actions { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .posts-section, .favorites-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .status-filter { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: 2px solid #e5e7eb; background: white; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; }
+        .filter-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .post-card { display: flex; gap: 20px; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 20px; transition: transform 0.3s ease; }
+        .post-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .post-image { width: 150px; height: 150px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+        .post-image img { width: 100%; height: 100%; object-fit: cover; }
+        .post-content { flex: 1; }
+        .post-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .post-location { color: #6b7280; margin-bottom: 10px; }
+        .post-description { color: #4b5563; line-height: 1.6; margin-bottom: 15px; }
+        .admin-feedback { background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .post-stats { display: flex; gap: 20px; margin: 15px 0; color: #6b7280; }
+        .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .post-date { color: #9ca3af; font-size: 0.9rem; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6b7280; }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; color: #d1d5db; }
+        .favorites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 20px; margin-top: 20px; }
+        .favorite-card { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: transform 0.3s ease; }
+        .favorite-card:hover { transform: translateY(-2px); }
+        .favorite-card img { width: 100%; height: 150px; object-fit: cover; }
+        .favorite-content { padding: 15px; }
         @media (max-width: 768px) {
-            .post-card {
-                flex-direction: column;
-            }
-
-            .post-image {
-                width: 100%;
-                height: 200px;
-            }
-
-            .dashboard-actions {
-                flex-direction: column;
-            }
-
-            .post-header {
-                flex-direction: column;
-                gap: 10px;
-            }
+            .post-card { flex-direction: column; }
+            .post-image { width: 100%; height: 200px; }
+            .dashboard-actions { flex-direction: column; }
+            .post-header { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
 <body>
+
 <!-- Navbar -->
 <nav class="navbar">
     <div class="nav-container">
@@ -272,9 +77,9 @@
             <h2>Camping Sri Lanka</h2>
         </div>
         <div class="nav-menu">
-                <span class="nav-user">
-                    <i class="fas fa-user-circle"></i> <%= user.getFullName() %>
-                </span>
+            <span class="nav-user">
+                <i class="fas fa-user-circle"></i> <%= user.getFullName() %>
+            </span>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -285,6 +90,7 @@
 <!-- Dashboard Container -->
 <div class="dashboard-container">
     <div class="dashboard-content">
+
         <!-- Welcome Card -->
         <div class="welcome-card">
             <h1>Welcome back, <%= user.getFullName() %>!</h1>
@@ -353,15 +159,9 @@
                                 <h3>${place.placeName}</h3>
                                 <span class="status-badge status-${place.status}">
                                     <c:choose>
-                                        <c:when test="${place.status == 'pending'}">
-                                            <i class="fas fa-clock"></i> Pending Review
-                                        </c:when>
-                                        <c:when test="${place.status == 'approved'}">
-                                            <i class="fas fa-check-circle"></i> Approved
-                                        </c:when>
-                                        <c:when test="${place.status == 'rejected'}">
-                                            <i class="fas fa-times-circle"></i> Rejected
-                                        </c:when>
+                                        <c:when test="${place.status == 'pending'}"><i class="fas fa-clock"></i> Pending Review</c:when>
+                                        <c:when test="${place.status == 'approved'}"><i class="fas fa-check-circle"></i> Approved</c:when>
+                                        <c:when test="${place.status == 'rejected'}"><i class="fas fa-times-circle"></i> Rejected</c:when>
                                     </c:choose>
                                 </span>
                             </div>
@@ -389,9 +189,10 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${place.status == 'pending' || place.status == 'rejected'}">
-                                    <a href="${pageContext.request.contextPath}/place/edit/${place.id}" class="btn btn-small">
-                                        <i class="fas fa-edit"></i> Edit
+                                    <a href="${pageContext.request.contextPath}/place/edit?id=${place.id}">Edit
+
                                     </a>
+
                                 </c:if>
                                 <span class="post-date">Posted: ${place.createdAt}</span>
                             </div>
@@ -455,11 +256,7 @@
 
             const status = this.dataset.status;
             document.querySelectorAll('.post-card').forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (status === 'all' || card.dataset.status === status) ? 'flex' : 'none';
             });
         });
     });

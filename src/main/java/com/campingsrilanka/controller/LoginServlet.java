@@ -41,9 +41,12 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
 
-            // Redirect immediately based on role
-            String target = user.isAdmin() ? "/WEB-INF/views/adminDashboard.jsp" : "/WEB-INF/views/dashboard.jsp";
-            request.getRequestDispatcher(target).forward(request, response);
+            // Redirect to the appropriate servlet
+            if (user.isAdmin()) {
+                response.sendRedirect(request.getContextPath() + "/adminDashboard");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/dashboard");
+            }
         } else {
             request.setAttribute("error", "Invalid username or password");
             request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);

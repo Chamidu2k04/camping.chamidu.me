@@ -1,27 +1,24 @@
 package com.campingsrilanka.controller;
 
-import com.campingsrilanka.dao.PlaceDAO;
 import com.campingsrilanka.model.Place;
 import com.campingsrilanka.model.User;
+import com.campingsrilanka.util.DatabaseConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
-    private PlaceDAO placeDAO;
-
-    @Override
-    public void init() {
-        placeDAO = new PlaceDAO();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
@@ -35,26 +32,73 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
-        try {
-            // Get user's places
-            List<Place> userPlaces = placeDAO.getPlacesByUserId(user.getId());
+        List<Place> userPlaces = new ArrayList<>();
+        List<Place> favorites = new ArrayList<>();
+        int totalPosts = 0;
 
-            // Get user's favorites (you'll need to implement this in PlaceDAO)
-            List<Place> favorites = placeDAO.getFavoritePlaces(user.getId());
+        try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // Calculate total posts
-            int totalPosts = userPlaces.size();
+            // --- Fetch user posts ---
+            String sql = "SELECT * FROM places WHERE user_id = ? ORDER BY created_at DESC";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, user.getId());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Place p = new Place();
+                        p.setId(rs.getInt("id"));
+                        p.setPlaceName(rs.getString("place_name"));
+                        p.setLocation(rs.getString("location"));
+                        p.setDescription(rs.getString("description"));
+                        p.setStatus(rs.getString("status"));
+                        p.setPrimaryImage(getPrimaryImage(conn, rs.getInt("id")));
+                        p.setViewCount(rs.getInt("view_count"));
+                        p.setRatingAvg(rs.getDouble("rating_avg"));
+                        p.setRatingCount(rs.getInt("rating_count"));
+                        p.setAdminComment(rs.getString("admin_comment"));
+                        p.setCreatedAt(String.valueOf(rs.getTimestamp("created_at")));
+                        userPlaces.add(p);
+                    }
+                }
+            }
 
-            request.setAttribute("userPlaces", userPlaces);
-            request.setAttribute("favorites", favorites);
-            request.setAttribute("totalPosts", totalPosts);
+            totalPosts = userPlaces.size();
 
-            request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+            // --- Fetch favorites ---
+            String sqlFav = "SELECT p.* FROM favorites f " +
+                    "JOIN places p ON f.place_id = p.id WHERE f.user_id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlFav)) {
+                stmt.setInt(1, user.getId());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Place p = new Place();
+                        p.setId(rs.getInt("id"));
+                        p.setPlaceName(rs.getString("place_name"));
+                        p.setLocation(rs.getString("location"));
+                        p.setPrimaryImage(getPrimaryImage(conn, rs.getInt("id")));
+                        favorites.add(p);
+                    }
+                }
+            }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error loading dashboard");
-            request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
         }
+
+        request.setAttribute("userPlaces", userPlaces);
+        request.setAttribute("favorites", favorites);
+        request.setAttribute("totalPosts", totalPosts);
+
+        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+    }
+
+    private String getPrimaryImage(Connection conn, int placeId) throws SQLException {
+        String sql = "SELECT image_path FROM place_images WHERE place_id = ? AND is_primary = 1 LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, placeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getString("image_path");
+            }
+        }
+        return null;
     }
 }
