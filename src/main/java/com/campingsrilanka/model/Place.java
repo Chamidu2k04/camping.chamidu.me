@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Place {
     private int id;
+    private int userId;
     private String placeName;
     private String description;
     private String location;
@@ -14,13 +15,18 @@ public class Place {
     private int ratingCount;
     private String createdAt;
     private String googleMapLink;
+    private String tips;
     private List<String> images;
     private boolean isFavorited; // for logged-in user
     private String primaryImage; // for listing
+    private String status;
+    private String adminComment;
 
     // Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
     public String getPlaceName() { return placeName; }
     public void setPlaceName(String placeName) { this.placeName = placeName; }
     public String getDescription() { return description; }
@@ -41,10 +47,16 @@ public class Place {
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public String getGoogleMapLink() { return googleMapLink; }
     public void setGoogleMapLink(String googleMapLink) { this.googleMapLink = googleMapLink; }
+    public String getTips() { return tips; }
+    public void setTips(String tips) { this.tips = tips; }
     public List<String> getImages() { return images; }
     public void setImages(List<String> images) { this.images = images; }
     public boolean isFavorited() { return isFavorited; }
     public void setFavorited(boolean favorited) { isFavorited = favorited; }
     public String getPrimaryImage() { return primaryImage; }
     public void setPrimaryImage(String primaryImage) { this.primaryImage = primaryImage; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getAdminComment() { return adminComment; }
+    public void setAdminComment(String adminComment) { this.adminComment = adminComment; }
 }
