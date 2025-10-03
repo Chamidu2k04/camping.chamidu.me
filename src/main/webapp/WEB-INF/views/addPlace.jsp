@@ -115,7 +115,7 @@
         <textarea name="tips" rows="3"></textarea>
 
         <label>Upload Images (1-5)</label>
-        <input type="file" name="images" accept="image/*" multiple required>
+        <input type="file" name="images" accept="image/*" multiple>
 
         <button type="submit" class="btn-submit">Submit for Review</button>
     </form>
